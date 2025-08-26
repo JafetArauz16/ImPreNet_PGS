@@ -16,6 +16,4 @@ cd "$BASE_PATH/Scrip"
 
 # Ejecutar scrip
 
-#bash filter_rsID_model.sh
-
 bash filtrar_vcf_nuevo.sh
