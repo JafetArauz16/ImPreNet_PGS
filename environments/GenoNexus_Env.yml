@@ -1,0 +1,12 @@
+name: GenoNexus_Env
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - plink
+  - ucsc-liftover
+  - perl
+  - perl-app-cpanminus
+  - perl-term-readkey
