@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Unificar_vcf_hg38
+#SBATCH --job-name=Unificar_vcf
 #SBATCH --output=/home/garauzaguir/TFM_Jafet_Arauz/Results/Imputacion_TOPMed/VCF_Procesados/log/unificar_vcf_hg38_%j.out
 #SBATCH --error=/home/garauzaguir/TFM_Jafet_Arauz/Results/Imputacion_TOPMed/VCF_Procesados/log/unificar_vcf_hg38_%j.err
 #SBATCH --ntasks=1

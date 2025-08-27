@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=imputacion_plot
-#SBATCH --output=/home/garauzaguir/TFM_Jafet_Arauz/Figuras/logs/imputacion_plot.out
-#SBATCH --error=/home/garauzaguir/TFM_Jafet_Arauz/Figuras/logs/imputacion_plot.err
+#SBATCH --output=/home/garauzaguir/TFM_Jafet_Arauz/ImPreNet_PGS/Figuras/logs/imputacion_plot.out
+#SBATCH --error=/home/garauzaguir/TFM_Jafet_Arauz/ImPreNet_PGS/Figuras/logs/imputacion_plot.err
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
@@ -10,9 +10,11 @@
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=garauzaguir@alumni.unav.es
 
+# Ir al directorio del script
+cd "$BASE_PATH/Scrip"
 
-source /home/garauzaguir/TFM_Jafet_Arauz/Programas/Miniconda3/etc/profile.d/conda.sh
+source "$BASE_PATH/Programas/Miniconda3/etc/profile.d/conda.sh"
 conda activate GenoNexus_Env
 
 # Ejecutar el script
-Rscript /home/garauzaguir/TFM_Jafet_Arauz/Scrip/analisis_imputacion.R
+Rscript analisis_imputacion.R

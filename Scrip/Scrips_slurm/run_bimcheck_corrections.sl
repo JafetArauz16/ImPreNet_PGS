@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=corregir_HRC_final
-#SBATCH --output=/home/garauzaguir/TFM_Jafet_Arauz/Results/Correcciones_Raw_data/Logs/corregir_HRC_final_%j.out
-#SBATCH --error=/home/garauzaguir/TFM_Jafet_Arauz/Results/Correcciones_Raw_data/Logs/corregir_HRC_final_%j.err
+#SBATCH --output=/home/garauzaguir/TFM_Jafet_Arauz/ImPreNet_PGS/Results/Correcciones_Raw_data/Logs/corregir_HRC_final_%j.out
+#SBATCH --error=/home/garauzaguir/TFM_Jafet_Arauz/ImPreNet_PGS/Results/Correcciones_Raw_data/Logs/corregir_HRC_final_%j.err
 #SBATCH --time=00:30:00
 #SBATCH --mem=1G
 #SBATCH --cpus-per-task=2

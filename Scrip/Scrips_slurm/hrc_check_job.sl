@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=Bim_check_final
-#SBATCH --output=/home/garauzaguir/TFM_Jafet_Arauz/Results/Bim_Check/logs/bim_check_final_%j.out
-#SBATCH --error=/home/garauzaguir/TFM_Jafet_Arauz/Results/Bim_Check/logs/bim_check_final_%j.err
+#SBATCH --output=/home/garauzaguir/TFM_Jafet_Arauz/ImPreNet_PGS/Results/Bim_Check/logs/bim_check_final_%j.out
+#SBATCH --error=/home/garauzaguir/TFM_Jafet_Arauz/ImPreNet_PGS/Results/Bim_Check/logs/bim_check_final_%j.err
 #SBATCH --time=01:00:00
 #SBATCH --mem=32G
 #SBATCH --partition=short
