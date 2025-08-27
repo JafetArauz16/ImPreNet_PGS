@@ -54,7 +54,7 @@ cat("Total de SNPs imputados:", nrow(info_total), "\n")
 # Gráfico 1: Histograma global de R²
 g1 <- ggplot(info_total, aes(x = R2)) +
   geom_histogram(bins = 100, fill = "steelblue", color = "black") +
-  geom_vline(xintercept = c(0.3, 0.7), linetype = "dashed", color = c("orange", "darkgreen"), size = 1) +
+  geom_vline(xintercept = c(0.3, 0.7), linetype = "dashed", color = c("orange", "darkgreen"), linewidth = 1) +
   labs(title = "Distribución global de R²", x = "R²", y = "Número de SNPs") +
   theme_minimal()
 ggsave(filename = file.path(salida, "grafico1_histograma_R2.png"), plot = g1, width = 8, height = 5)
@@ -93,7 +93,7 @@ snp_por_chr <- info_total %>%
   arrange(CHR)
 g4 <- ggplot(snp_por_chr, aes(x = CHR, y = n, group = 1)) +
   geom_col(fill = "skyblue") +
-  geom_line(color = "darkblue", size = 1) +
+  geom_line(color = "darkblue", linewidth = 1) +
   geom_point(color = "darkblue", size = 2) +
   labs(title = "Número de SNPs imputados por cromosoma", x = "Cromosoma", y = "Cantidad de SNPs") +
   theme_minimal()
@@ -106,7 +106,7 @@ r2_promedios <- info_total %>%
   arrange(CHR)
 g5 <- ggplot(r2_promedios, aes(x = CHR, y = promedio_R2, group = 1)) +
   geom_col(fill = "lightgreen") +
-  geom_line(color = "darkgreen", size = 1) +
+  geom_line(color = "darkgreen", linewidth = 1) +
   geom_point(color = "darkgreen", size = 2) +
   labs(title = "R² promedio por cromosoma", x = "Cromosoma", y = "R² promedio") +
   theme_minimal()

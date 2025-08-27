@@ -21,7 +21,7 @@ conda activate GenoNexus_Env
 MODEL_NAME="sangre"
 VCF_IN="${BASE_PATH}/Results/Imputacion_TOPMed/VCF_Procesados/nhs_subjects_hg38.vcf.gz"
 POS_FILE="${BASE_PATH}/Reference_Data/GTEx_Models/model_keys_${MODEL_NAME}.tsv"   
-OUTDIR="${BASE_PATH}/Results/PrediXcan_prep/VCF_filtrado_nuevo"
+OUTDIR="${BASE_PATH}/Results/PrediXcan_prep/VCF_filtrado"
 VCF_OUT="${OUTDIR}/nhs_subjects_hg38_filtrado_${MODEL_NAME}.vcf.gz"
 THREADS=16
 # =================================

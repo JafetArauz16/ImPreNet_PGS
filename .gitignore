@@ -1,0 +1,23 @@
+# Ignorar contenido de carpetas pesadas
+Raw_Data/*
+Reference_Data/*
+Metadata/*
+Results/*
+Programas/*
+
+# Mantener las carpetas en el repo
+!Raw_Data/.gitkeep
+!Reference_Data/.gitkeep
+!Metadata/.gitkeep
+!Results/.gitkeep
+!Programas/.gitkeep
+
+# Ignorar temporales comunes
+*.log
+*.lock
+*.tmp
+*.gz
+*.zip
+*.tar
+*.tar.gz
+*.DS_Store
