@@ -234,7 +234,7 @@ El pipeline debe ejecutarse en el siguiente orden:
 
 ## Imputación
 
-Los archivos `.vcf.gz` generados en `Results/Correcciones_Raw_data/VCF_by_Chrom/` deben subirse al **Michigan Imputation Server (TOPMed)**.
+Los archivos `.vcf.gz` generados en `Results/Correcciones_Raw_data/VCF_by_Chrom/` deben subirse al **TOPMed Imputation Server**.
 
 Requisitos:
 
@@ -242,7 +242,7 @@ Requisitos:
 * Cromosomas numerados como 1–22 y 23 (para X).
 * Subir todos los cromosomas.
 
-Referencia: [Michigan Imputation Server](https://imputationserver.sph.umich.edu/index.html)
+Referencia: [TOPMed Imputation Server](https://imputationserver.sph.umich.edu/index.html)
 
 ---
 
