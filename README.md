@@ -1,156 +1,318 @@
 # ImPreNet-PGS
 
-Workflow for breast cancer genetic risk prediction combining **Imputation**, **PrediXcan**, **NetActivity** and **Polygenic Risk Scores (PGS)**.
+Pipeline para la predicción del riesgo genético de cáncer de mama combinando **Imputación**, **PrediXcan**, **NetActivity** y **Polygenic Risk Scores (PGS)**.
 
-This pipeline is structured in different stages. The **first stage** corresponds to **data preparation for imputation**, which requires specific genomic tools (PLINK, LiftOver, Perl).
+Este pipeline está estructurado en diferentes etapas. La **primera etapa** corresponde a la **preparación de datos para la imputación**, la cual requiere herramientas genómicas específicas (PLINK, LiftOver, Perl).
 
 ---
 
-## Installation
+## Instalación y configuración del pipeline
 
-Step 3. Clone this repository
-git clone https://github.com/usuario/ImPreNet_PGS.git
-cd ImPreNet_PGS
+### Paso 1. Configurar la variable BASE\_PATH
 
-Getting Started
-After cloning this repository, the following folder structure will be created:
-
-ImPreNet_PGS/
-│── Raw_Data/     # Place your raw input files here (BED/BIM/FAM)
-│── Result/       # Processed outputs and QC results
-│── Scrip/        # Main pipeline scripts (.sh)
-│── Temporales/   # Temporary intermediate files
-│── Figuras/      # Figures and plots generated during analysis
-│── README.md
-
-### Step 1. Install Miniconda3
-For organization, it is recommended to install Miniconda inside the Programas/
-mkdir -p Programas
-cd Programas
-
-```bash
-# 1. Download the installer
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-
-# 2. Run the installer
-bash Miniconda3-latest-Linux-x86_64.sh
-
-# 3. (Optional) Reload shell configuration so conda is available
-source ~/.bashrc
-
-# 4. Verify installation
-conda --version
-
-Step 2. Configure Conda channels
-# Add channels (the order matters: conda-forge should have higher priority than bioconda)
-conda config --add channels defaults
-conda config --add channels bioconda
-conda config --add channels conda-forge
-
-# Or alternatively (preferred way):
-conda config --set channel_priority strict
-
-# Check configuration
-conda config --show channels
-
-
-
-Conda environment setup
-This project uses the GenoNexus_Env environment for genomic data processing (PLINK, LiftOver, Perl modules).
-
-Conda environment setup
-conda env create -f environments/GenoNexus_Env.yml
-conda activate GenoNexus_Env
-
-Verify installation
-
-After activating the environment, check that the main tools are available:
-# PLINK
-plink --version
-# Expected output (example):
-# PLINK v1.90b6.21 64-bit (19 Oct 2020)
-
-# LiftOver
-liftOver
-# Expected output:
-# liftOver - Move annotations from one assembly to another
-# usage: liftOver oldFile map.chain newFile unMapped
-
-# Perl module Term::ReadKey
-perl -MTerm::ReadKey -e 'print "Perl Term::ReadKey module OK\n";'
-# Expected output:
-# Perl Term::ReadKey module OK
-
-### Configure base path
-Before running any script, define the base path of the project:
+Antes de ejecutar cualquier script, definir la ruta base del proyecto:
 
 ```bash
 export BASE_PATH=/home/usuario/ImPreNet_PGS
 echo $BASE_PATH
+```
 
+### Paso 2. Clonar este repositorio
 
-Move your raw data files to the Raw_Data/ folder before running the pipeline.
+```bash
+git clone https://github.com/usuario/ImPreNet_PGS.git
+cd ImPreNet_PGS
+```
 
+### Paso 3. Instalar Miniconda3
+
+Se recomienda instalar Miniconda dentro de la carpeta `Programas/`:
+
+```bash
+mkdir -p Programas
+cd Programas
+
+# Descargar el instalador
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+# Ejecutar el instalador
+bash Miniconda3-latest-Linux-x86_64.sh
+```
+
+Durante la instalación:
+
+* Cuando aparezca el mensaje
+  *Miniconda3 will now be installed into this location:*
+  asegúrese de escribir la ruta:
+
+  ```bash
+  $BASE_PATH/Programas/Miniconda3
+  ```
+* Cuando el programa pregunte:
+  *You can undo this by running `conda init --reverse $SHELL`? \[yes|no]*
+  responda `no`.
+
+Después:
+
+```bash
+source ~/.bashrc
+conda --version  # Verificar instalación
+```
+
+### Paso 4. Configurar canales de Conda
+
+El orden de los canales es importante: conda-forge debe tener prioridad sobre bioconda.
+
+```bash
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+conda config --set channel_priority flexible
+conda config --show channels
+```
+
+### Paso 5. Crear los entornos Conda
+
+Este proyecto utiliza tres entornos de Conda para el procesamiento de datos genómicos:
+
+```bash
+cd $BASE_PATH/environments
+
+conda activate base
+conda env create -f GenoNexus_Env.yml
+conda env create -f GenExpress_env.yml
+conda env create -f convert_vcf_env.yml
+```
+
+Posteriormente:
+
+```bash
+conda activate GenoNexus_Env
+conda install -c conda-forge perl-app-cpanminus
+
+cpanm --local-lib=~/perl5 Term::ReadKey
+export PERL5LIB=~/perl5/lib/perl5:$PERL5LIB
+echo $PERL5LIB
+
+# Verificar módulo de Perl
+perl -MTerm::ReadKey -e 'print "Perl Term::ReadKey module OK\\n";'
+```
+
+---
+
+## Estructura del proyecto
+
+Al clonar el repositorio, se creará la siguiente estructura de carpetas:
+
+```
+ImPreNet_PGS/
+│── Raw_Data/ # Archivos de entrada crudos (BED/BIM/FAM)
+│── Results/ # Salidas procesadas y resultados de QC
+│── Scrip/ # Scripts principales del pipeline (.sh)
+│── environments/ # Archivos .yml para entornos Conda
+│── Reference_Data/ # Datos de referencia para imputación y modelos
+│── Metadata/ # Metadatos asociados
+│── Figuras/ # Figuras y gráficos generados en los análisis
+│── README.md # Documentación principal del repositorio
+```
+
+---
+
+## Reference Data
+
+La carpeta `Reference_Data/` contiene los archivos necesarios para el pipeline. A continuación, se describe cómo obtenerlos y prepararlos.
+
+### Bim-check
+
+```bash
+cd "$BASE_PATH/Reference_Data"
+
+mkdir Bim_Check
+cd Bim_Check
+wget https://www.well.ox.ac.uk/~wrayner/tools/HRC-1000G-check-bim-v4.2.7.zip
+unzip HRC-1000G-check-bim-v4.2.7.zip
+```
+
+Esto genera:
+
+* `HRC-1000G-check-bim.pl`
+* `LICENSE.txt`
+
+### Panel HRC
+
+```bash
+wget ftp://ngs.sanger.ac.uk/production/hrc/HRC.r1-1.GRCh37.wgs.mac5.sites.tab.gz
+gunzip HRC.r1-1.GRCh37.wgs.mac5.sites.tab.gz
+```
+
+### Modelos GTEx (hg38, mashr)
+
+```bash
+cd ..
+mkdir GTEx_Models
+cd GTEx_Models
+
+wget https://zenodo.org/record/3518299/files/mashr_eqtl.tar -O mashr_eqtl.tar
+
+tar -xvf mashr_eqtl.tar eqtl/mashr/mashr_Whole_Blood.db
+mv eqtl/mashr/mashr_Whole_Blood.db Whole_Blood_GRCh38.db
+
+tar -xvf mashr_eqtl.tar eqtl/mashr/mashr_Breast_Mammary_Tissue.db
+mv eqtl/mashr/mashr_Breast_Mammary_Tissue.db Breast_Mammary_Tissue_GRCh38.db
+
+rm -r eqtl
+rm mashr_eqtl.tar
+```
+
+Generar archivos `model_keys`:
+
+```bash
+sqlite3 Breast_Mammary_Tissue_GRCh38.db <<EOF | sed 's/_/\t/g' | awk '{print $1,$2,$3,$4}' OFS="\t" > model_keys_mama.tsv
+SELECT DISTINCT varID FROM weights;
+EOF
+
+sqlite3 Whole_Blood_GRCh38.db <<EOF | sed 's/_/\t/g' | awk '{print $1,$2,$3,$4}' OFS="\t" > model_keys_sangre.tsv
+SELECT DISTINCT varID FROM weights;
+EOF
+```
+
+### Archivos para PGS
+
+```bash
+cd ..
+mkdir PGS_score_file
+cd PGS_score_file
+
+wget https://ftp.ebi.ac.uk/pub/databases/spot/pgs/scores/PGS000335/ScoringFiles/PGS000335.txt.gz
+gunzip -c PGS000335.txt.gz > PGS000335.txt
+cd $BASE_PATH
+```
+
+---
 
 ## Workflow de preparación de datos
 
+Este workflow está diseñado para ejecutarse en entornos HPC. Para ello se cuenta con la carpeta `/Scrips_slurm/`, donde se encuentran los scripts de SLURM que permiten lanzar las tareas. En esa carpeta hay un `README.md` específico con detalles de su ejecución.
+
 El pipeline debe ejecutarse en el siguiente orden:
 
-1. **check_bim_inicial.sh**  
-   Corre el primer `bim-check` sobre los datos crudos para identificar inconsistencias de cromosoma, posición, strand y frecuencias alélicas.
+1. **check\_bim\_inicial.sh** – Primer `bim-check` sobre los datos crudos.
+2. **Correcciones\_Raw\_data.sh** – Correcciones iniciales sugeridas por `bim-check`.
+3. **check\_bim\_after\_corrections.sh** – Verificación tras las correcciones.
+4. **Correcciones\_finales.sh** – Últimas correcciones y QC final.
+5. **check\_bim\_final.sh** – Validación final antes de la imputación.
+6. **Frecuencias_alelicas.R** – Gráfico de comparación de frecuencias alélicas entre la cohorte NHS y el panel HRC (QC visual).
+7. **PCA\_analisis.sh** – Análisis de PCA con datos corregidos.
+8. **convert\_vcf.sh** – Conversión a VCF, compresión, indexación y renombrado.
 
-2. **Correcciones_Raw_data.sh**  
-   Aplica las correcciones iniciales sugeridas por `bim-check` (cromosomas, posiciones, strand flips, referencia A2, inferencia de sexo, QC).  
-   → Genera un conjunto de archivos PLINK filtrados y corregidos.
+---
 
-3. **bimcheck_after_corrections.sh**  
-   Ejecuta un nuevo `bim-check` sobre los datos ya corregidos para verificar que los problemas fueron solucionados.
+## Imputación
 
-4. **Correcciones_finales.sh**  
-   Aplica las últimas correcciones restantes, limpieza final y QC adicional si es necesario.  
-   → Deja un conjunto final de archivos PLINK listos para conversión a VCF.
+Los archivos `.vcf.gz` generados en `Results/Correcciones_Raw_data/VCF_by_Chrom/` deben subirse al **Michigan Imputation Server (TOPMed)**.
 
-5. **check_bim_final.sh**  
-   Corre el `bim-check` final sobre los datos corregidos, asegurando que todo está en orden antes de la imputación.
+Requisitos:
 
-6. **convert_vcf.sh**  
-   Convierte los archivos PLINK finales a formato VCF:  
-   - Fuerza alelos de referencia  
-   - Comprime e indexa con bgzip/tabix  
-   - Renombra `chrX` como `23`  
-   - Divide el VCF por cromosoma en archivos listos para imputación.
+* Archivos comprimidos con bgzip (`.vcf.gz`) e indexados con tabix (`.tbi`).
+* Cromosomas numerados como 1–22 y 23 (para X).
+* Subir todos los cromosomas.
 
-## Paso final: Imputación
+Referencia: [Michigan Imputation Server](https://imputationserver.sph.umich.edu/index.html)
 
-Una vez generados los archivos `.vcf.gz` divididos por cromosoma (en `Results/Correcciones_Raw_data/VCF_by_Chrom/`), estos deben subirse al **Michigan Imputation Server (TOPMed)** para la imputación.
-
-Requisitos importantes:
-- Los archivos deben estar **comprimidos con bgzip** (`.vcf.gz`) y **indexados con tabix** (`.tbi`).
-- Los cromosomas deben estar numerados como `1-22` y `23` (para X).
-- Subir todos los cromosomas generados (`chr1.vcf.gz` ... `chr23.vcf.gz`).
-
-📌 Referencia: [Michigan Imputation Server](https://imputationserver.sph.umich.edu/index.html)
-
-El servidor devolverá archivos imputados que podrán ser utilizados posteriormente para **PrediXcan**, **NetActivity** y análisis de **PGS**.
+---
 
 ## Descarga de resultados de imputación (TOPMed)
 
-Una vez completada la imputación en el **Michigan Imputation Server (TOPMed)**, se deben descargar los resultados.  
-El propio servidor proporciona un **script de descarga** (`wget` o `curl`) en la página de resultados.
+Una vez completada la imputación, el servidor genera un comando `wget` o `curl` para descargar los resultados.
 
-### Instrucciones:
-1. Accede a tu carpeta de resultados en el servidor de imputación.
-2. Copia el script de descarga que aparece en el portal (por ejemplo `download.sh`).
-3. Modifica la línea del script para descargar **todos los archivos imputados** en lugar de archivos individuales.  
-   - El script suele contener un comando como:  
-     ```bash
-     curl -sL ....
-     ```  
-   - Ajusta esta línea para descargar todos los cromosomas.
+1. Acceder a la página de resultados del servidor.
+2. Copiar la línea de comando de descarga.
+3. Guardarla en el script `descargar_imputacion.sh`.
+4. Ejecutar el script para descargar todos los cromosomas.
 
-### Nota importante:
-- Los archivos imputados estarán comprimidos (`.vcf.gz`).  
-- Asegúrate de descargarlos **todos los cromosomas** y almacenarlos en la carpeta de resultados correspondiente.
+Los archivos imputados estarán comprimidos (`.vcf.gz`). Asegúrese de descargarlos todos y almacenarlos en la carpeta de resultados correspondiente.
+
+---
+
+## Análisis de PGS
+
+Con los datos imputados se puede calcular el **Polygenic Risk Score (PGS)**.
+Ejecutar el script Bash correspondiente y, de manera opcional, el script de R para análisis y visualización.
+
+```bash
+bash calc_pgs.sh
+Rscript R_scrips/PGS_analisis.R
+```
+
+Los resultados incluyen gráficos y modelos, guardados en la carpeta `/Figuras/`.
+
+---
+
+## Preparación para PrediXcan
+
+Los resultados suelen venir en un `.zip` protegido con contraseña. En el script `descomprimir_zip.sh`, se debe modificar la variable:
+
+```bash
+ZIP_PASSWORD="xxxxxxxx"
+```
+
+Ejecutar:
+
+```bash
+bash Scrip/descomprimir_zip.sh
+```
+
+Unificar los cromosomas en un único VCF:
+
+```bash
+bash Unificar_vcf.sh
+```
+
+Filtrar el archivo unificado por modelo (mama o sangre):
+
+```bash
+bash filtrar_vcf.sh
+```
+
+---
+
+## Ejecución de PrediXcan
+
+Editar el script `predixcan.sh` según el tejido:
+
+* **Mama**:
+
+```bash
+VCF_FILE="$BASE_PATH/Results/PrediXcan_prep/VCF_filtrado_nuevo/nhs_subjects_hg38_filtrado_mama.vcf.gz"
+OUT_DIR="$BASE_PATH/Results/PrediXcan_Output/Tejido_mama"
+MODEL_DB="$BASE_PATH/Reference_Data/GTEx_Models/Breast_Mammary_Tissue_GRCh38.db"
+```
+
+* **Sangre**:
+
+```bash
+VCF_FILE="$BASE_PATH/Results/PrediXcan_prep/VCF_filtrado_nuevo/nhs_subjects_hg38_filtrado_sangre.vcf.gz"
+OUT_DIR="$BASE_PATH/Results/PrediXcan_Output/Tejido_sangre"
+MODEL_DB="$BASE_PATH/Reference_Data/GTEx_Models/Whole_Blood_GRCh38.db"
+```
+
+Ejecutar:
+
+```bash
+bash predixcan.sh
+```
+
+---
+
+## Análisis con NetActivity
+
+Para el análisis final con NetActivity se utilizan los scripts de R disponibles en `/R_scrips/`:
+
+* `Analisis_final_tejido_mama.R`
+* `Analisis_final_tejido_sangre.R`
+
+Los gráficos y tablas generados (en formato HTML) se guardan en la carpeta `/Figuras/`.
+
 
 
 
