@@ -242,7 +242,7 @@ Requisitos:
 * Cromosomas numerados como 1–22 y 23 (para X).
 * Subir todos los cromosomas.
 
-Referencia: [TOPMed Imputation Server](https://imputationserver.sph.umich.edu/index.html)
+Referencia: [TOPMed Imputation Server](https://imputation.biodatacatalyst.nhlbi.nih.gov/#!pages/home)
 
 ---
 
