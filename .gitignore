@@ -23,3 +23,6 @@ Figuras/*
 *.tar
 *.tar.gz
 *.DS_Store
+
+# Ignorar logs y temporales de Nextflow
+Scrip/.nextflow*
