@@ -4,6 +4,7 @@ Reference_Data/*
 Metadata/*
 Results/*
 Programas/*
+Figuras/*
 
 # Mantener las carpetas en el repo
 !Raw_Data/.gitkeep
@@ -11,6 +12,7 @@ Programas/*
 !Metadata/.gitkeep
 !Results/.gitkeep
 !Programas/.gitkeep
+!Figuras/.gitkeep
 
 # Ignorar temporales comunes
 *.log
