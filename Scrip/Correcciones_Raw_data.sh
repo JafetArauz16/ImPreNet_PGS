@@ -22,7 +22,7 @@ source "${BASE_PATH}/Programas/Miniconda3/etc/profile.d/conda.sh"
 conda activate GenoNexus_Env
 
 # === Rutas ===
-INPUT_PREFIX="${BASE_PATH}/Raw_Data/Matrix/nhs_subjects"
+INPUT_PREFIX="${BASE_PATH}/Raw_Data/nhs_subjects"
 CORR_DIR="${BASE_PATH}/Results/Bim_Check/Resultados_Raw_data"
 OUTPUT_PREFIX="${BASE_PATH}/Results/Correcciones_Raw_data/nhs_subjects_hg19_QC_passed_HRC_corrected"
 TMP_PREFIX="${BASE_PATH}/Results/Correcciones_Raw_data/TEMP_CORR"

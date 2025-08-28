@@ -23,8 +23,8 @@ export PERL5LIB=~/perl5/lib/perl5:$PERL5LIB
 
 # Check_bim a los archivos orginales
 perl "${BASE_PATH}/Reference_Data/Bim_Check/HRC-1000G-check-bim.pl" \
-  -b "${BASE_PATH}/Raw_Data/Matrix/nhs_subjects.bim" \
-  -f "${BASE_PATH}/Raw_Data/Matrix/nhs_subjects_freq.frq" \
+  -b "${BASE_PATH}/Raw_Data/nhs_subjects.bim" \
+  -f "${BASE_PATH}/Raw_Data/nhs_subjects_freq.frq" \
   -r "${BASE_PATH}/Reference_Data/Bim_Check/HRC.r1-1.GRCh37.wgs.mac5.sites.tab" \
   -h \
   > "${OUTPUT_DIR}/bimcheck_inicial.log" 2>&1
