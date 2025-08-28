@@ -82,6 +82,7 @@ conda activate base
 conda env create -f GenoNexus_Env.yml
 conda env create -f GenExpress_env.yml
 conda env create -f convert_vcf_env.yml
+conda env create -f r_genomics_analysis_env.yml
 ```
 
 Posteriormente:
@@ -96,6 +97,7 @@ echo $PERL5LIB
 
 # Verificar módulo de Perl
 perl -MTerm::ReadKey -e 'print "Perl Term::ReadKey module OK\\n";'
+conda deactivate 
 ```
 
 ---
@@ -188,6 +190,21 @@ gunzip -c PGS000335.txt.gz > PGS000335.txt
 cd $BASE_PATH
 ```
 
+---
+
+## Organización de datos
+
+Antes de ejecutar el pipeline asegúrese de colocar los archivos de entrada en las carpetas correspondientes, usar los siguientes comandos
+para ubicarse en las carpetas donde debe colocorar los datos crudos y metadatos:
+
+- **Datos crudos** (`.bed`, `.bim`, `.fam`): deben ubicarse en /Raw_Data , no deben quedar en otra carpeta.
+  ```bash
+  cd "$BASE_PATH/Raw_Data"
+  ```
+- **Metadatos** (información clínica, fenotipos, covariables, etc.): deben ubicarse en
+ ```bash
+cd "$BASE_PATH/Metadata"
+  ```
 ---
 
 ## Workflow de preparación de datos
