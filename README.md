@@ -192,7 +192,7 @@ cd $BASE_PATH
 
 ---
 
-## Organización de datos
+## Organización de datos inicial
 
 Antes de ejecutar el pipeline asegúrese de colocar los archivos de entrada en las carpetas correspondientes, usar los siguientes comandos
 para ubicarse en las carpetas donde debe colocorar los datos crudos y metadatos:
@@ -200,10 +200,18 @@ para ubicarse en las carpetas donde debe colocorar los datos crudos y metadatos:
 - **Datos crudos** (`.bed`, `.bim`, `.fam`): deben ubicarse en /Raw_Data , no deben quedar en otra carpeta.
   ```bash
   cd "$BASE_PATH/Raw_Data"
+  
   ```
+- **Crear archivo .frq del archivo .bim** debe ubicarse en /Raw_Data , no deben quedar en otra carpeta.
+  ```bash
+  plink --bfile nombre_de_archivo_sin_extension --freq --out nombre_de_archivo_sin_extension
+  
+  ```
+  
 - **Metadatos** (información clínica, fenotipos, covariables, etc.): deben ubicarse en
  ```bash
 cd "$BASE_PATH/Metadata"
+
   ```
 ---
 
