@@ -3,8 +3,8 @@
 #SBATCH --output=/home/garauzaguir/TFM_Jafet_Arauz/ImPreNet_PGS/Results/PGS_Results/logs/pgs_calc_%j.out
 #SBATCH --error=/home/garauzaguir/TFM_Jafet_Arauz/ImPreNet_PGS/Results/PGS_Results/logs/pgs_calc_%j.err
 #SBATCH --time=08:00:00
-#SBATCH --mem=24G
-#SBATCH --cpus-per-task=4
+#SBATCH --mem=32G
+#SBATCH --cpus-per-task=16
 #SBATCH --partition=medium
 #SBATCH --nodelist=nodo12
 #SBATCH --mail-type=BEGIN,END,FAIL
