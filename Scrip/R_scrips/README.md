@@ -17,6 +17,6 @@ Esta carpeta contiene los scripts en R utilizados en el pipeline (**PrediXcan**,
 
 ## Outputs
 
-Todos los resultados generados por estos scripts (gráficas, tablas en HTML, reportes) se guardan automáticamente en la carpeta:
+Todos los resultados generados por estos scripts (gráficas, tablas en HTML, reportes) se guardan automáticamente en la carpeta: Figuras
 
 
