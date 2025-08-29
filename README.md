@@ -2,7 +2,7 @@
 
 Pipeline para la predicción del riesgo genético de cáncer de mama combinando **Imputación**, **PrediXcan**, **NetActivity** y **Polygenic Risk Scores (PGS)**.
 
-Este pipeline está estructurado en diferentes etapas. La **primera etapa** corresponde a la **preparación de datos para la imputación**, la cual requiere herramientas genómicas específicas (PLINK, LiftOver, Perl).
+Este pipeline está estructurado en diferentes etapas. La **primera etapa** corresponde a la **preparación de datos para la imputación**, la cual requiere herramientas genómicas específicas.
 
 ---
 
