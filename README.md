@@ -96,7 +96,7 @@ export PERL5LIB=~/perl5/lib/perl5:$PERL5LIB
 echo $PERL5LIB
 
 # Verificar módulo de Perl
-perl -MTerm::ReadKey -e 'print "Perl Term::ReadKey module OK\\n";'
+perl -MTerm::ReadKey -e "print \"Perl Term::ReadKey module OK\n\";"
 conda deactivate 
 ```
 
